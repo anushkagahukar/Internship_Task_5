@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cart - Amazon Clone</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .qty-remove {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 0.5rem;
+    }
+    .qty-remove input {
+      width: 60px;
+      padding: 0.3rem;
+    }
+    .remove-btn {
+      background-color: #e53935;
+      color: white;
+      border: none;
+      padding: 0.3rem 0.6rem;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .total {
+      font-size: 1.5rem;
+      text-align: right;
+      margin: 2rem;
+      color: #111;
+    }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <div class="logo" onclick="window.location.href='index.html'">Amazon Clone</div>
+  </header>
+
+  <section class="hero">
+    <h1>Your Shopping Cart</h1>
+  </section>
+
+  <section class="products" id="cartList"></section>
+  <div class="total" id="totalAmount">Total: $0.00</div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const cartList = document.getElementById('cartList');
+      const totalAmount = document.getElementById('totalAmount');
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+      fetch('data/products.json')
+        .then(res => res.json())
+        .then(products => {
+          if (cart.length === 0) {
+            cartList.innerHTML = '<p style="padding:2rem">Your cart is empty.</p>';
+            totalAmount.textContent = '';
+            return;
+          }
+
+          let productMap = {};
+          products.forEach(p => productMap[p.id] = p);
+
+          // Count quantity
+          const quantityMap = {};
+          cart.forEach(id => {
+            quantityMap[id] = (quantityMap[id] || 0) + 1;
+          });
+
+          // Render UI
+          cartList.innerHTML = '';
+          let total = 0;
+
+          for (const [id, qty] of Object.entries(quantityMap)) {
+            const product = productMap[id];
+            if (!product) continue;
+            total += product.price * qty;
+
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            card.innerHTML = `
+              <img src="${product.image}" alt="${product.name}">
+              <div class="info">
+                <h3>${product.name}</h3>
+                <p>${product.description}</p>
+                <div class="price">$${product.price} × <input type="number" min="1" value="${qty}" data-id="${id}" class="qty-input" /></div>
+                <div class="qty-remove">
+                  <button class="remove-btn" data-id="${id}">Remove</button>
+                </div>
+              </div>
+            `;
+            cartList.appendChild(card);
+          }
+
+          totalAmount.textContent = `Total: $${total.toFixed(2)}`;
+
+          // Update quantity
+          document.querySelectorAll('.qty-input').forEach(input => {
+            input.addEventListener('change', e => {
+              const id = e.target.dataset.id;
+              const newQty = parseInt(e.target.value);
+              if (newQty < 1) return;
+
+              // Rebuild cart array
+              cart = cart.filter(pid => pid !== id);
+              for (let i = 0; i < newQty; i++) cart.push(id);
+              localStorage.setItem('cart', JSON.stringify(cart));
+              location.reload();
+            });
+          });
+
+          // Remove item
+          document.querySelectorAll('.remove-btn').forEach(btn => {
+            btn.addEventListener('click', e => {
+              const id = e.target.dataset.id;
+              cart = cart.filter(pid => pid !== id);
+              localStorage.setItem('cart', JSON.stringify(cart));
+              location.reload();
+            });
+          });
+        });
+    });
+  </script>
+</body>
+</html>

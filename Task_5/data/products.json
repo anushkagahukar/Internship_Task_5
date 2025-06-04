@@ -1,0 +1,30 @@
+[
+  {
+    "id": "1",
+    "name": "Wireless Headphones",
+    "description": "Noise-canceling over-ear headphones with long battery life.",
+    "price": 59.99,
+    "image": "https://www.channelnews.com.au/wp-content/uploads/2017/09/beats_by_dr_dre_mhdm2am_a_studio_wireless_over_ear_headphones_gold_1098356.jpg"
+  },
+  {
+    "id": "2",
+    "name": "Smartphone",
+    "description": "Latest Android phone with amazing display and camera.",
+    "price": 399.99,
+    "image": "https://i5.walmartimages.com/asr/c8ea674c-7a95-4584-8f40-40fd62145fe7.c8ab6abc9c198e72b0032feb7c400268.jpeg"
+  },
+  {
+    "id": "3",
+    "name": "Smartwatch",
+    "description": "Track your fitness and get notifications on your wrist.",
+    "price": 89.99,
+    "image": "https://m.media-amazon.com/images/I/71erQe31UmL._AC_SL1500_.jpg"
+  },
+  {
+    "id": "4",
+    "name": "Bluetooth Speaker",
+    "description": "Portable speaker with rich bass and clear sound.",
+    "price": 29.99,
+    "image": "https://th.bing.com/th/id/OIP.ME7w8biTCoGCGAD20L1S6wHaHX?rs=1&pid=ImgDetMain"
+  }
+]
